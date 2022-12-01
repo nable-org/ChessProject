@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using src;
 
 namespace SolarWinds.MSP.Chess
 {
@@ -16,13 +17,13 @@ namespace SolarWinds.MSP.Chess
         [Test]
 		public void Has_MaxBoardWidth_of_7()
 		{
-			Assert.AreEqual(ChessBoard.MaxBoardWidth, 7);
+			Assert.AreEqual(Constants.ChessBoard.MaxBoardWidth, 7);
 		}
 
         [Test]
 		public void Has_MaxBoardHeight_of_7()
 		{
-			Assert.AreEqual(ChessBoard.MaxBoardHeight, 7);
+			Assert.AreEqual(Constants.ChessBoard.MaxBoardHeight, 7);
 		}
 
         [Test]
@@ -93,12 +94,13 @@ namespace SolarWinds.MSP.Chess
 			for (int i = 0; i < 10; i++)
 			{
 				Pawn pawn = new Pawn(PieceColor.Black);
-				int row = i / ChessBoard.MaxBoardWidth;
-				chessBoard.Add(pawn, 6 + row, i % ChessBoard.MaxBoardWidth, PieceColor.Black);
+				int row = i / (Constants.ChessBoard.MaxBoardWidth + 1),
+					column = i % (Constants.ChessBoard.MaxBoardWidth + 1);
+				chessBoard.Add(pawn, 6 + row, column, PieceColor.Black);
 				if (row < 1)
 				{
 					Assert.AreEqual(pawn.XCoordinate, (6 + row));
-					Assert.AreEqual(pawn.YCoordinate, (i % ChessBoard.MaxBoardWidth));
+					Assert.AreEqual(pawn.YCoordinate, column);
 				}
 				else
 				{

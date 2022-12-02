@@ -66,9 +66,9 @@ namespace SolarWinds.MSP.Chess
         /// <summary>
         /// Invalidates the board and the pieces after an allowed (valid) move.
         /// </summary>
-        public void InvalidateBoardAfterMove(ChessPiece piece, int xCoordinate, int yCoordinate, int newX, int newY)
+        public void PerformMoveOnBoard(ChessPiece piece, int newX, int newY)
         {
-            this.pieces[xCoordinate, yCoordinate] = null;
+            this.pieces[piece.XCoordinate, piece.YCoordinate] = null;
             this.pieces[newX, newY] = piece;
 
             piece.XCoordinate = newX;
@@ -78,7 +78,7 @@ namespace SolarWinds.MSP.Chess
         /// <summary>
         /// Invalidates the board and the pieces after an allowed (valid) capture.
         /// </summary>
-        public void InvalidateBoardAfterCapture(ChessPiece piece)
+        public void PerformCaptureOnBoard(ChessPiece piece)
         {
             this.pieces[piece.XCoordinate, piece.YCoordinate] = null;
 

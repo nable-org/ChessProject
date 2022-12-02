@@ -63,5 +63,15 @@ namespace src
         protected abstract bool CanMove(int newX, int newY);
 
         protected abstract bool CanCapture(int newX, int newY, out ChessPiece pieceToCapture);
+
+        public override string ToString()
+        {
+            return CurrentPositionAsString();
+        }
+
+        protected string CurrentPositionAsString()
+        {
+            return string.Format("Current X: {1}{0}Current Y: {2}{0}Piece Color: {3}", Environment.NewLine, XCoordinate, YCoordinate, PieceColor);
+        }
     }
 }

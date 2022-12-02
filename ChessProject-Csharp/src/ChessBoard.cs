@@ -1,5 +1,6 @@
 ﻿using src;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace SolarWinds.MSP.Chess
 {
@@ -33,6 +34,29 @@ namespace SolarWinds.MSP.Chess
         {
             return 0 <= xCoordinate && xCoordinate <= Constants.ChessBoard.MaxBoardWidth &&
                 0 <= yCoordinate && yCoordinate <= Constants.ChessBoard.MaxBoardHeight;
+        }
+
+        public bool IsEmptyBoardPosition(int xCoordinate, int yCoordinate)
+        {
+            return this.IsLegalBoardPosition(xCoordinate, yCoordinate) && this.pieces.IsEmptyPosition(xCoordinate, yCoordinate);
+        }
+
+        public ChessPiece GetPieceFromBoardPosition(int xCoordinate, int yCoordinate)
+        {
+            return this.IsLegalBoardPosition(xCoordinate, yCoordinate) ? this.pieces[xCoordinate, yCoordinate] : null;
+        }
+
+        /// <summary>
+        /// Invalidates the board and the pieces after an allowed (valid) move.
+        /// </summary>
+        public void InvalidateBoardAfterMove(ChessPiece piece, int newX, int newY)
+        {
+            piece.XCoordinate = newX;
+            piece.YCoordinate = newY;
+            // TODO Update pieces arrays for positions
+            // Remove captured figures
+            // Make pawn transformations
+            // Make castle
         }
     }
 }

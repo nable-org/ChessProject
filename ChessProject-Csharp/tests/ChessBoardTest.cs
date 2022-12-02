@@ -76,6 +76,28 @@ namespace SolarWinds.MSP.Chess
 		}
 
         [Test]
+        public void IsEmptyBoardPosition_False_For_Existing_Piece()
+        {
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var isEmptyPosition = chessBoard.IsEmptyBoardPosition(6, 3);
+
+            Assert.IsFalse(isEmptyPosition);
+        }
+
+        [Test]
+        public void IsEmptyBoardPosition_True_For_Missing_Piece()
+        {
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var isEmptyPosition = chessBoard.IsEmptyBoardPosition(5, 3);
+
+            Assert.IsTrue(isEmptyPosition);
+        }
+
+        [Test]
 		public void Avoids_Duplicate_Positioning()
 		{
 			Pawn firstPawn = new Pawn(PieceColor.Black);
@@ -109,5 +131,49 @@ namespace SolarWinds.MSP.Chess
 				}
 			}
 		}
-	}
+
+		[Test]
+        public void GetPieceFromBoardPosition_NotNull_For_Existing_Piece()
+		{
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var chessPiece = chessBoard.GetPieceFromBoardPosition(6, 3);
+
+            Assert.IsNotNull(chessPiece);
+        }
+
+        [Test]
+        public void GetPieceFromBoardPosition_ExactPiece_For_Existing_Piece()
+        {
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var chessPiece = chessBoard.GetPieceFromBoardPosition(6, 3);
+
+			Assert.AreSame(pawn, chessPiece);
+        }
+
+        [Test]
+        public void GetPieceFromBoardPosition_Null_For_Missing_Piece()
+        {
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var chessPiece = chessBoard.GetPieceFromBoardPosition(7, 4);
+
+            Assert.IsNull(chessPiece);
+        }
+
+        [Test]
+        public void GetPieceFromBoardPosition_Null_For_Invalid_Position()
+        {
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var chessPiece = chessBoard.GetPieceFromBoardPosition(9, 1);
+
+            Assert.IsNull(chessPiece);
+        }
+    }
 }

@@ -9,6 +9,9 @@ namespace src
         private int MaxAllowedNumberOfPawnsPerColor = 8;
         private ChessPiece[,] allPieces;
 
+        private List<ChessPiece> capturedPieces;
+
+        [Obsolete]
         private Pawn[,] pawns;
         private Dictionary<PieceColor, short> pawnsCounter;
 
@@ -17,6 +20,7 @@ namespace src
         internal ChessPieces(int maxBoardWidth, int maxBoardHeight)
         {
             this.allPieces = new ChessPiece[maxBoardWidth + 1, maxBoardHeight + 1];
+            this.capturedPieces = new List<ChessPiece>();
 
             // init all individual collections of pieces
             this.pawns = new Pawn[maxBoardWidth + 1, maxBoardHeight + 1];
@@ -33,17 +37,30 @@ namespace src
             {
                 return this.allPieces[xCoordinate, yCoordinate];
             }
+            set
+            {
+                this.allPieces[xCoordinate, yCoordinate] = value;
+            }
+        }
+
+        public List<ChessPiece> CapturedPieces
+        {
+            get
+            {
+                return this.capturedPieces;
+            }
         }
 
         internal bool CanAddPawn(int xCoordinate, int yCoordinate, PieceColor pieceColor)
         {
             /* Conditions:
                 - position is valid (aka within the board)
-                - three is not a different piece there empty
+                - there is not a different piece there aka empty
                 - you have not reached maximum number of pawns allowed
             */
             
-            return pawns[xCoordinate, yCoordinate] == null && pawnsCounter[pieceColor] < MaxAllowedNumberOfPawnsPerColor;
+            return this.IsEmptyPosition(xCoordinate, yCoordinate) && pawnsCounter[pieceColor] < MaxAllowedNumberOfPawnsPerColor;
+            //pawns[xCoordinate, yCoordinate] == null;
         }
 
         internal void AddPawn(Pawn pawn)
@@ -51,7 +68,12 @@ namespace src
             pawns[pawn.XCoordinate, pawn.YCoordinate] = pawn;
             pawnsCounter[pawn.PieceColor]++;
 
-            this.allPieces[pawn.XCoordinate, pawn.YCoordinate] = pawn;
+            this.AddPiece(pawn);
+        }
+
+        internal void AddPiece(ChessPiece piece)
+        {
+            this.allPieces[piece.XCoordinate, piece.YCoordinate] = piece;
         }
 
         internal bool IsEmptyPosition(int xCoordinate, int yCoordinate)

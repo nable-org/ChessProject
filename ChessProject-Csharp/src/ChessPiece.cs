@@ -9,6 +9,7 @@ namespace src
         private int xCoordinate;
         private int yCoordinate;
         private PieceColor pieceColor;
+        private bool isCaptured;
 
         public ChessPiece(PieceColor pieceColor)
         {
@@ -39,8 +40,28 @@ namespace src
             private set { pieceColor = value; }
         }
 
+        public bool IsCaptured
+        {
+            get
+            {
+                return this.isCaptured;
+            }
+            private set
+            {
+                this.isCaptured = value;
+            }
+        }
+
+        public void SetAsCaptured()
+        {
+            // Move piece "out of the board"
+            this.isCaptured = true;
+            this.XCoordinate = Constants.InvalidXCoordinate;
+            this.YCoordinate = Constants.InvalidYCoordinate;
+        }
+
         protected abstract bool CanMove(int newX, int newY);
 
-        protected abstract bool CanCapture(int newX, int newY);
+        protected abstract bool CanCapture(int newX, int newY, out ChessPiece pieceToCapture);
     }
 }

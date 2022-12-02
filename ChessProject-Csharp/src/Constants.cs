@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SolarWinds.MSP.Chess;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -23,5 +24,7 @@ namespace src
 
         public const int InvalidXCoordinate = -1;
         public const int InvalidYCoordinate = -1;
+
+        public static readonly Type DefaultPawnPromotionType = typeof(Queen);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using src;
 
 namespace SolarWinds.MSP.Chess
 {
@@ -16,13 +17,13 @@ namespace SolarWinds.MSP.Chess
         [Test]
 		public void Has_MaxBoardWidth_of_7()
 		{
-			Assert.AreEqual(ChessBoard.MaxBoardWidth, 7);
+			Assert.AreEqual(Constants.ChessBoard.MaxBoardWidth, 7);
 		}
 
         [Test]
 		public void Has_MaxBoardHeight_of_7()
 		{
-			Assert.AreEqual(ChessBoard.MaxBoardHeight, 7);
+			Assert.AreEqual(Constants.ChessBoard.MaxBoardHeight, 7);
 		}
 
         [Test]
@@ -75,6 +76,28 @@ namespace SolarWinds.MSP.Chess
 		}
 
         [Test]
+        public void IsEmptyBoardPosition_False_For_Existing_Piece()
+        {
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var isEmptyPosition = chessBoard.IsEmptyBoardPosition(6, 3);
+
+            Assert.IsFalse(isEmptyPosition);
+        }
+
+        [Test]
+        public void IsEmptyBoardPosition_True_For_Missing_Piece()
+        {
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var isEmptyPosition = chessBoard.IsEmptyBoardPosition(5, 3);
+
+            Assert.IsTrue(isEmptyPosition);
+        }
+
+        [Test]
 		public void Avoids_Duplicate_Positioning()
 		{
 			Pawn firstPawn = new Pawn(PieceColor.Black);
@@ -93,12 +116,13 @@ namespace SolarWinds.MSP.Chess
 			for (int i = 0; i < 10; i++)
 			{
 				Pawn pawn = new Pawn(PieceColor.Black);
-				int row = i / ChessBoard.MaxBoardWidth;
-				chessBoard.Add(pawn, 6 + row, i % ChessBoard.MaxBoardWidth, PieceColor.Black);
+				int row = i / (Constants.ChessBoard.MaxBoardWidth + 1),
+					column = i % (Constants.ChessBoard.MaxBoardWidth + 1);
+				chessBoard.Add(pawn, 6 + row, column, PieceColor.Black);
 				if (row < 1)
 				{
 					Assert.AreEqual(pawn.XCoordinate, (6 + row));
-					Assert.AreEqual(pawn.YCoordinate, (i % ChessBoard.MaxBoardWidth));
+					Assert.AreEqual(pawn.YCoordinate, column);
 				}
 				else
 				{
@@ -107,5 +131,49 @@ namespace SolarWinds.MSP.Chess
 				}
 			}
 		}
-	}
+
+		[Test]
+        public void GetPieceFromBoardPosition_NotNull_For_Existing_Piece()
+		{
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var chessPiece = chessBoard.GetPieceFromBoardPosition(6, 3);
+
+            Assert.IsNotNull(chessPiece);
+        }
+
+        [Test]
+        public void GetPieceFromBoardPosition_ExactPiece_For_Existing_Piece()
+        {
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var chessPiece = chessBoard.GetPieceFromBoardPosition(6, 3);
+
+			Assert.AreSame(pawn, chessPiece);
+        }
+
+        [Test]
+        public void GetPieceFromBoardPosition_Null_For_Missing_Piece()
+        {
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var chessPiece = chessBoard.GetPieceFromBoardPosition(7, 4);
+
+            Assert.IsNull(chessPiece);
+        }
+
+        [Test]
+        public void GetPieceFromBoardPosition_Null_For_Invalid_Position()
+        {
+            Pawn pawn = new Pawn(PieceColor.Black);
+            chessBoard.Add(pawn, 6, 3, PieceColor.Black);
+
+            var chessPiece = chessBoard.GetPieceFromBoardPosition(9, 1);
+
+            Assert.IsNull(chessPiece);
+        }
+    }
 }
